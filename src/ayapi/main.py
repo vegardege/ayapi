@@ -35,7 +35,14 @@ async def embeddings(
     """Create embeddings from text strings using the specified model and
     hyper parameters."""
     if model := EMBEDDING_MODELS.get(input.model):
-        embeddings = model.encode(input.sentences, convert_to_numpy=True)
+        embeddings = model.encode(
+            input.sentences,
+            precision=input.precision,
+            convert_to_numpy=True,
+            normalize_embeddings=input.normalize_embeddings,
+            truncate_dim=input.truncate_dim,
+            chunk_size=input.chunk_size,
+        )
         return EmbeddingResponse(embeddings=embeddings.tolist())
     else:
         raise HTTPException(
@@ -47,4 +54,4 @@ async def embeddings(
 @app.get("/embeddings/models", tags=["Embeddings"])
 async def embeddings_models() -> list[str]:
     """Get a list of all supported embedding models."""
-    return EMBEDDING_MODELS.keys()
+    return [m.value for m in EMBEDDING_MODELS.keys()]

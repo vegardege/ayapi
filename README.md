@@ -35,7 +35,19 @@ poetry run fastapi dev src/ayapi/main.py
 
 ## Usage
 
-Currently, the API only supports one endpoint:
+Currently, the API supports two endpoint:
+
+```bash
+curl -X GET http://localhost:8000/embeddings/models
+```
+
+Returns:
+
+```json
+["Qwen/Qwen3-Embedding-0.6B", "Alibaba-NLP/gte-multilingual-base"]
+```
+
+While:
 
 ```bash
 curl -X POST http://localhost:8000/embeddings \
@@ -52,7 +64,7 @@ curl -X POST http://localhost:8000/embeddings \
       }'
 ```
 
-This will return a JSON document:
+Returns:
 
 ```json
 {
