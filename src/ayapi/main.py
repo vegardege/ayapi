@@ -42,3 +42,9 @@ async def embeddings(
             status.HTTP_422_UNPROCESSABLE_ENTITY,
             "Embedding model not found",
         )
+
+
+@app.get("/embeddings/models", tags=["Embeddings"])
+async def embeddings_models() -> list[str]:
+    """Get a list of all supported embedding models."""
+    return EMBEDDING_MODELS.keys()
