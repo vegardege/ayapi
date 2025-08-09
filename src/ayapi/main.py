@@ -4,7 +4,11 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
 from ayapi.models import EMBEDDING_MODELS
-from ayapi.schemas import EmbeddingRequest, EmbeddingResponse
+from ayapi.schemas import (
+    EmbeddingRequest,
+    EmbeddingResponse,
+    RateLimitExceededError,
+)
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -16,9 +20,15 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
-@app.post("/embedding")
+@app.post(
+    "/embeddings",
+    responses={
+        status.HTTP_429_TOO_MANY_REQUESTS: {"model": RateLimitExceededError},
+    },
+    tags=["Embeddings"],
+)
 @limiter.limit("5/second")
-async def embedding(
+async def embeddings(
     request: Request,
     input: EmbeddingRequest,
 ) -> EmbeddingResponse:
@@ -29,6 +39,6 @@ async def embedding(
         return EmbeddingResponse(embeddings=embeddings.tolist())
     else:
         raise HTTPException(
-            status.HTTP_400_BAD_REQUEST,
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
             "Embedding model not found",
         )

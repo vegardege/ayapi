@@ -16,7 +16,7 @@ type EmbeddingSentences = Annotated[
 class EmbeddingRequest(BaseModel):
     """Text strings to embed and hyper parameters."""
 
-    model: EmbeddingModel = EmbeddingModel.NOMIC
+    model: EmbeddingModel = EmbeddingModel.QWEN_06B
     sentences: EmbeddingSentences
 
 
@@ -24,3 +24,9 @@ class EmbeddingResponse(BaseModel):
     """One vector per input text in the same order."""
 
     embeddings: list[list[float]]
+
+
+class RateLimitExceededError(BaseModel):
+    """Error message returned if the API is called too frequently."""
+
+    error: str

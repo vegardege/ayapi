@@ -1,7 +1,8 @@
 # AyAPI
 
 AyAPI is a thin [FastAPI](https://fastapi.tiangolo.com/) wrapper for
-python-only AI features I want to use in SPAs.
+python-only AI features. Its purpose is to make these functions
+available to an SPA.
 
 Source code is shared in the spirit of sharing, but you most likely
 want to create your own wrapper instead of trying to reuse this one.
@@ -37,10 +38,10 @@ poetry run fastapi dev src/ayapi/main.py
 Currently, the API only supports one endpoint:
 
 ```bash
-curl -X POST http://localhost:8000/embedding \
+curl -X POST http://localhost:8000/embeddings \
   -H "Content-Type: application/json" \
   -d '{
-        "model": "nomic",
+        "model": "Qwen/Qwen3-Embedding-0.6B",
         "sentences": [
           "apple",
           "pear",
